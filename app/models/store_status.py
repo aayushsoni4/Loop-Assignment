@@ -9,6 +9,6 @@ class StoreStatus(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     store_id = db.Column(db.String(22))
     status = db.Column(db.String)
-    timestamp_utc = db.Column(db.String)
+    timestamp_utc = db.Column(db.DateTime)
     business_hours = db.relationship("BusinessHours", backref="store", lazy=True)
     timezone_info = db.relationship("TimezoneInfo", backref="store", lazy=True)
