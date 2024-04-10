@@ -12,11 +12,18 @@ from app.models.business_hours import BusinessHours
 from app.models.timezone_info import TimezoneInfo
 
 
+def check_utc(timestamp):
+    if "." not in timestamp:
+        timestamp = timestamp.replace(" UTC", ".000000 UTC")
+    return timestamp
+
+
 def populate_store_status():
     df = pd.read_csv("data/store_status.csv")
     for _, row in df.iterrows():
         store_id = row["store_id"]
-        timestamp_utc = row["timestamp_utc"]
+        timestamp_utc = check_utc(row["timestamp_utc"])
+        timestamp_utc = datetime.strptime(timestamp_utc, "%Y-%m-%d %H:%M:%S.%f %Z")
         status = row["status"]
         # Check if entry already exists
         existing_entry = StoreStatus.query.filter_by(
